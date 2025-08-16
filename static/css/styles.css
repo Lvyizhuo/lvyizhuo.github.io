@@ -10909,6 +10909,33 @@ footer a:hover, footer a:active, footer a:focus {
   text-decoration: underline;
 }
 
+/* 只排除 shields.io 的徽章，其他 SVG 图片仍可被美化 */
+.main-body img:not([src*="shields.io"]) {
+  max-width: 90%;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.main-body img:not([src*="shields.io"]):hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* 特别处理 shields.io 徽章：恢复为内联，对齐文本 */
+.main-body img[src*="shields.io"] {
+  display: inline !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  transform: none !important;
+  vertical-align: middle;
+}
+
 
 
 

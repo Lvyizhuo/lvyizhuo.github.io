@@ -1,20 +1,16 @@
-[![XX](https://img.shields.io/badge/XX-github-blue?logo=github)](https://github.com/XX)
 
-I'm currently pursuing a Master's degree in XX at the Department of XX, XX University, XX.
 
-#### Email  
-<code>XX@XX.XX</code>  
-<code>XX@XX.XX</code>
+[![Lvyizhuo](https://img.shields.io/badge/Lvyizhuo-github-blue?logo=github)](https://github.com/Lvyizhuo)
 
-#### Education  
-**XX University**, Master of XX (XX – XX)  
-• GPA: XX/XX  
+He is currently pursuing a master's degree at Qilu University of Technology.
 
-**XX University**, Exchange student <br>  
-• As a XX, represented my college as an outstanding student for a XX exchange program.  
+#### Contact
 
-**XX University**, Honours Bachelor of XX (XX – XX)  
-• GPA: XX/XX (top XX%)  
+Email: Lvyizhuo1921708385@163.com
 
-#### Research Interests  
-XX, XX, XX, XX.
+#### Education
+M.E., Artificial Intelligence, Qilu University of Technology, 2024—至今.
+
+#### Research Interests
+Deep Learning, Graph Neural Network, Data Mining .
+
