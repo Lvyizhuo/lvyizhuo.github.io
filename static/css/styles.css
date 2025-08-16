@@ -10911,7 +10911,7 @@ footer a:hover, footer a:active, footer a:focus {
 
 /* 只排除 shields.io 的徽章，其他 SVG 图片仍可被美化 */
 .main-body img:not([src*="shields.io"]) {
-  max-width: 80%;
+  max-width: 90%;
   height: auto;
   display: block;
   margin-left: auto;
