@@ -161,13 +161,14 @@ f-1）使用DynGNN-AttLSTM模型预测快照序列$G_1,G_2,G_3,...,G_t$中的候
 
 f-2）使用贪心算法从候选中子节点集合中选择$k$个最佳种子节点。
 
-f-3）伪代码![image-20250829135004297](D:\Markdown\专利\assets\image-20250829135004297.png)
-
+f-3）伪代码
+![alt text](../static/assets/img/QQ20250904-161531.png)
 8.根据权力要求1所述的基于智慧家庭多维信息的动态社交网络快照分析及种子节点预测方法，其特征在于，步骤g）包括如下步骤：
 
 g-1）设计了三个损失函数来进行优化指导，分别是分类损失、排序损失、总损失。
 
 g-2）分类损失：我们采用 交叉熵损失（Cross-Entropy Loss）作为基础分类损失函数，记作 $\mathcal{L}_\text{cls}$​。利用模型输出的分类预测分数，计算源预测结果与真实标签的分类误差，约束模型学习“候选节点”与“非候选节点”的区分能力。分类损失被写为：
+
 $$
 \mathcal{L}_\text{cls} = -\frac{1}{N} \sum_{i=1}^{N} \sum_{c=0}^{1} y_{i,c} \cdot \log\left( \text{softmax}(z_{i,c}) \right)
 $$
@@ -175,6 +176,7 @@ $$
 其中$\mathcal{L}_\text{cls}$表示分类损失，值越小表示分类预测与真实标签越接近；$N$表示当前批次的节点总数（$N = \text{batch\_size} \times \text{num\_nodes}$）；$y_{i,c}$表示节点 $i$ 属于类别 $c$ 的真实标签（二分类，$c=1$ 表示“候选节点”，$c=0$ 表示“非候选节点”）；$z_{i,c}$：模型对节点 $i$ 属于类别 $c$ 的原始预测分数（classification_logits）；$\text{softmax}(\cdot)$归一化函数，将原始预测分数转换为类别概率：$\text{softmax}(z_{i,c}) = \frac{e^{z_{i,c}}}{\sum_{c'=0}^{1} e^{z_{i,c'}}} $。
 
 g-3）排序损失：我们引入Pairwise Logistic 损失作为排序损失函数，记作 $\mathcal{L}_\text{rank}$。通过构造“候选节点（正样本）”与“非候选节点（负样本）”的得分对，约束模型让正样本得分高于负样本，强化“候选节点优先级”。排序损失被写为：  
+
 $$
  \mathcal{L}_\text{rank} = \frac{1}{K} \sum_{j=1}^{K} \log\left( 1 + e^{-(s_{\text{pos},j} - s_{\text{neg},j})} \right) 
 $$
@@ -182,6 +184,7 @@ $$
 其中$\mathcal{L}_\text{rank}$表示排序损失，值越小表示正样本得分越显著高于负样本；$K$表示有效正负样本对的数量（$K = \min(\text{正样本数}, \text{负样本数})$）；$s_{\text{pos},j}$表示第 $j$ 个正样本（真实候选节点）的正类概率得分，由 $\text{softmax}(z_{\text{pos},j,1})$ 计算；$s_{\text{neg},j}$表示第 $j$ 个负样本（真实非候选节点）的正类概率得分，由 $\text{softmax}(z_{\text{neg},j,1})$ 计算；
 
 g-4）总损失：我们将分类损失与排序损失加权求和，得到最终用于模型优化的总损失，记作 $\mathcal{L}_\text{total}$。通过超参数$\lambda$​平衡两类损失的影响，灵活控制“分类准确率”与“排序合理性”的优化权重。总损失被写为：
+
 $$
 \mathcal{L}_\text{total} = \mathcal{L}_\text{cls} + \lambda \cdot \mathcal{L}_\text{rank}
 $$
@@ -194,7 +197,7 @@ $$
 
 Table 1. 四个数据集上的预测准确率
 
-![alt text](image.png)
+![alt text](../static/assets/img/1756973512415.png)
 
 ## 附图说明 
 
@@ -203,11 +206,12 @@ Table 1. 四个数据集上的预测准确率
 图 2 为本发明在与 Greedy方法在相同社交网络上的影响力传播范围对比；
 
 图 3 为本发明在 与 Greedy方法在相同社交网络上耗费时间对比；
-![alt text](框架图.svg)
+
+![alt text](../static/assets/img/框架图.svg)
 
 图1
-![
-!\[image-20250829135206645\](D:\Markdown\专利\assets\static\assets\img\image-20250829135206645.png)](../static/assets/img/image-20250829135206645.png)
+
+![alt text](../static/assets/img/image-20250829135206645.png)
 
 图2
 
