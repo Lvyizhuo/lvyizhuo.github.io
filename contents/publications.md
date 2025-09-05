@@ -1,1 +1,1 @@
-- 发明专利：基于智慧家庭多维信息的动态社交网络快照分析及种子节点预测方法 [Paper](https://dynamicgraphinfluencemaximization.mmgg.dpdns.org/Project_guidence/)
+- 发明专利：基于智慧家庭多维信息的动态社交网络快照分析及种子节点预测方法 [paper](https://lvyizhuo.github.io/DocsWeb/)
