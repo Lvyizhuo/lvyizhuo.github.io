@@ -5,8 +5,8 @@ _site/
 # Ignore the directory for local files during development
 local/
 
-# Ignore the Gemfile that is generated
-Gemfile.lock
+# Note: Gemfile.lock should be committed for GitHub Pages deployment
+# Gemfile.lock
 
 # Ignore files created by npm
 node_modules
