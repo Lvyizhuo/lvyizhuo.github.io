@@ -1,0 +1,107 @@
+---
+permalink: /
+# title: "Lvyizhuo's Home"
+author_profile: true
+redirect_from: 
+  - /about/
+  - /about.html
+---
+
+<h1><img src="https://emojis.slackmojis.com/emojis/images/1531849430/4246/blob-sunglasses.gif?1531849430" width="30"/> Hey! Nice to see you.</h1>
+
+<!-- <p align="left">
+  <img src="https://komarev.com/ghpvc/?username=Lvyizhuo-homepage&label=Page%20Views&color=0e75b6&style=flat-square" alt="Lvyizhuo's Page Views" />
+  <img src="https://img.shields.io/github/followers/Lvyizhuo?label=Followers&style=flat-square&color=blue" alt="followers" />
+  <img src="https://img.shields.io/github/stars/Lvyizhuo?label=Stars&style=flat-square&color=yellow" alt="stars" />
+</p> -->
+
+Welcome to my homepage! 
+
+I am a current Master's student studying at **[Qilu University of Technology (QLU)](https://www.qlu.edu.cn/)** and a Researcher/Intern at the **Medical and AI Team** in **[Shandong Artificial Intelligence Institute (SDAI)](http://.sdai.net/)** (2025–2027). 
+
+Currently, I am working on **Dynamic Influence Maximization** and **Graph Neural Networks**, while also exploring **Agents, RAG, and Large Language Models (LLMs)**. I am open to collaborations on AI Development, Java Backend Development, and Mini Program Development.
+
+## 🎓 Education
+* **M.S. in Artificial Intelligence**, Qilu University of Technology, 2024 – Present
+
+## 🏆 Selected Awards & Honors
+* **2025**: National Second Prize – "HUAWEI Cup" The 22nd China Post-Graduate Mathematical Contest in Modeling
+* **2024**: First Prize – The 15th Chinese College Student Mathematics Competition (CMC)
+* **2024**: Third Prize – The 15th China Modeling Mathematics Challenge (SPSSPRO)
+* **2022**: First Prize – The Chinese College Student Mathematical Modeling Competition (CUMCM)
+
+## 💡 Patents & Research
+* **Invention Patent**: A Method for Dynamic Influence Maximization in Smart Homes Based on Temporal Awareness | [View Details](https://lvyizhuo.github.io/DocsWeb/)
+
+### Publications
+<ul>{% for post in site.publications reversed %}
+  {% include archive-single-cv.html %}
+{% endfor %}</ul>
+
+<h2 align="left">🛠 Things I code with:</h2>
+
+**AI & Algorithms**: Reinforcement Learning (RL), Graph Neural Networks (GNN), Large Language Models (LLMs), AI Application Development.
+
+![Python](https://img.shields.io/badge/-Python-3776AB?style=flat-square&logo=python&logoColor=white)
+![Java](https://img.shields.io/badge/-Java-007396?style=flat-square&logo=java&logoColor=white)
+![C](https://img.shields.io/badge/-C-A8B9CC?style=flat-square&logo=c&logoColor=white)
+![HTML5](https://img.shields.io/badge/-HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
+![Bash](https://img.shields.io/badge/-Bash-4EAA25?style=flat-square&logo=gnu-bash&logoColor=white)
+![PyTorch](https://img.shields.io/badge/-PyTorch-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)
+![TensorFlow](https://img.shields.io/badge/-TensorFlow-FF6F00?style=flat-square&logo=tensorflow&logoColor=white)
+![Scikit-learn](https://img.shields.io/badge/-Scikit--learn-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)
+![Pandas](https://img.shields.io/badge/-Pandas-150458?style=flat-square&logo=pandas&logoColor=white)
+![NumPy](https://img.shields.io/badge/-NumPy-013243?style=flat-square&logo=numpy&logoColor=white)
+![Matplotlib](https://img.shields.io/badge/-Matplotlib-11557c?style=flat-square&logo=python&logoColor=white)
+![OpenCV](https://img.shields.io/badge/-OpenCV-5C3EE8?style=flat-square&logo=opencv&logoColor=white)
+![HuggingFace](https://img.shields.io/badge/-HuggingFace-FFD21E?style=flat-square&logo=huggingface&logoColor=black)
+![Ollama](https://img.shields.io/badge/-Ollama-000000?style=flat-square&logo=ollama&logoColor=white)
+![Vue.js](https://img.shields.io/badge/-Vue.js-4FC08D?style=flat-square&logo=vue.js&logoColor=white)
+![Node.js](https://img.shields.io/badge/-Node.js-339933?style=flat-square&logo=node.js&logoColor=white)
+![Docker](https://img.shields.io/badge/-Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
+![Git](https://img.shields.io/badge/-Git-F05032?style=flat-square&logo=git&logoColor=white)
+![Qt](https://img.shields.io/badge/-Qt-41CD52?style=flat-square&logo=qt&logoColor=white)
+![MySQL](https://img.shields.io/badge/-MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white)
+![Redis](https://img.shields.io/badge/-Redis-DC382D?style=flat-square&logo=redis&logoColor=white)
+![Jupyter](https://img.shields.io/badge/-Jupyter-F37626?style=flat-square&logo=jupyter&logoColor=white)
+![Anaconda](https://img.shields.io/badge/-Anaconda-44A833?style=flat-square&logo=anaconda&logoColor=white)
+![MATLAB](https://img.shields.io/badge/-MATLAB-0076A8?style=flat-square&logo=mathworks&logoColor=white)
+![Linux](https://img.shields.io/badge/-Linux-FCC624?style=flat-square&logo=linux&logoColor=black)
+![VS Code](https://img.shields.io/badge/-VS%20Code-007ACC?style=flat-square&logo=visual-studio-code&logoColor=white)
+![PyCharm](https://img.shields.io/badge/-PyCharm-000000?style=flat-square&logo=pycharm&logoColor=white)
+![IntelliJ IDEA](https://img.shields.io/badge/-IntelliJ%20IDEA-000000?style=flat-square&logo=intellij-idea&logoColor=white)
+
+## 🎁 Open Source Projects
+
+<table>
+  <thead align="center">
+    <tr>
+      <th>Project</th>
+      <th>Stars</th>
+      <th>Forks</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://github.com/Lvyizhuo/2048_MiniProgram"><b>2048 MiniProgram</b></a></td>
+      <td><img alt="Stars" src="https://img.shields.io/github/stars/Lvyizhuo/2048_MiniProgram?style=flat-square&labelColor=343b41"/></td>
+      <td><img alt="Forks" src="https://img.shields.io/github/forks/Lvyizhuo/2048_MiniProgram?style=flat-square&labelColor=343b41"/></td>
+    </tr>
+    <tr>
+      <td><a href="https://github.com/Lvyizhuo/DynamicGraphInfluenceMaximization"><b>Dynamic Graph Influence Maximization</b></a></td>
+      <td><img alt="Stars" src="https://img.shields.io/github/stars/Lvyizhuo/DynamicGraphInfluenceMaximization?style=flat-square&labelColor=343b41"/></td>
+      <td><img alt="Forks" src="https://img.shields.io/github/forks/Lvyizhuo/DynamicGraphInfluenceMaximization?style=flat-square&labelColor=343b41"/></td>
+    </tr>
+  </tbody>
+</table>
+
+## 📝 Latest Posts
+- [【Linux服务器】——模型训练技巧](https://blog.csdn.net/Lvyizhuo/article/details/150344137)
+- [【ClaudeCode】——使用技巧与常用指令](https://blog.csdn.net/Lvyizhuo/article/details/150487217)
+- [【大数据网络传播模型】——影响力最大化](https://blog.csdn.net/Lvyizhuo/article/details/142965718)
+
+---
+
+## 👨‍🏫 Others
+* **Teaching**: Mathematics Teacher at Xinyang Third Primary School (2024.04 – 2024.10).
+* **Service**: Active member of the Medical and AI research group at SDAI.
