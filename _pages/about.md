@@ -7,39 +7,72 @@ redirect_from:
   - /about.html
 ---
 
-<h1><img src="https://emojis.slackmojis.com/emojis/images/1531849430/4246/blob-sunglasses.gif?1531849430" width="30"/> Hey! Nice to see you.</h1>
+<h1 style="font-size: 1.6em; border-bottom: none; margin-bottom: 10px;">
+  <img src="https://emojis.slackmojis.com/emojis/images/1531849430/4246/blob-sunglasses.gif?1531849430" width="32" style="vertical-align: middle;"/> 
+  Hey! Nice to see you.
+</h1>
 
-Welcome to my homepage! 
+<div style="font-size: 1.1em; line-height: 1.6; color: #333;">
+Welcome to my homepage! I am a passionate researcher and developer.
+</div>
 
-I am a current Master's student studying at **[Qilu University of Technology (QLU)](https://www.qlu.edu.cn/)** and a Researcher/Intern at the **Medical and AI Team** in **[Shandong Artificial Intelligence Institute (SDAI)](http://.sdai.net/)** (2025–2027). 
+---
 
-Currently, I am working on **Dynamic Influence Maximization** and **Graph Neural Networks**, while also exploring **Agents, RAG, and Large Language Models (LLMs)**. I am open to collaborations on AI Development, Java Backend Development, and Mini Program Development.
+### <i class="fa fa-fw fa-user-circle"></i> About Me
 
-## My research interests include:
-- Graph Neural Networks
-- Dynamic social network
-- Influence maximization
-- Spatiotemporal deep learning
-- Reinforcement learning
+> I am a Master's student at **[Qilu University of Technology (QLU)](https://www.qlu.edu.cn/)** and a Researcher/Intern at the **Medical and AI Team** within the **[Shandong Artificial Intelligence Institute (SDAI)](http://sdai.net/)** (2025–2027).
 
-## 🎓 Education
+Currently, my work bridge the gap between theory and application. I am focusing on **Dynamic Influence Maximization** and **Graph Neural Networks**, while actively exploring the frontiers of **Agents, RAG, and Large Language Models (LLMs)**. 
+
+<i class="fa fa-handshake-o"></i> I am always open to collaborations on:
+`AI Development` • `Java Backend` • `Mini Program Development`
+
+---
+
+### <i class="fa fa-fw fa-flask"></i> Research Interests
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+  <div>
+    <ul style="list-style-type: none; padding-left: 0;">
+      <li><i class="fa fa-share-alt" style="color: #3776AB;"></i> Graph Neural Networks</li>
+      <li><i class="fa fa-users" style="color: #3776AB;"></i> Dynamic Social Networks</li>
+      <li><i class="fa fa-line-chart" style="color: #3776AB;"></i> Influence Maximization</li>
+    </ul>
+  </div>
+  <div>
+    <ul style="list-style-type: none; padding-left: 0;">
+      <li><i class="fa fa-map-marker" style="color: #3776AB;"></i> Spatiotemporal Deep Learning</li>
+      <li><i class="fa fa-gamepad" style="color: #3776AB;"></i> Reinforcement Learning</li>
+    </ul>
+  </div>
+</div>
+
+---
+
+### <i class="fa fa-fw fa-rss"></i> Recent News
+* **[2025.12]** 🎉 Won the National Second Prize in the "HUAWEI Cup" Mathematical Modeling Contest!
+* **[2024.09]** 🎓 Started my M.S. journey at Qilu University of Technology.
+
+---
+
+<!-- ## 🎓 Education
 * **M.S. in Artificial Intelligence**, Qilu University of Technology, 2024 – Present
 
 ## 🏆 Selected Awards & Honors
 * **2025**: National Second Prize – "HUAWEI Cup" The 22nd China Post-Graduate Mathematical Contest in Modeling
 * **2024**: First Prize – The 15th Chinese College Student Mathematics Competition (CMC)
 * **2024**: Third Prize – The 15th China Modeling Mathematics Challenge (SPSSPRO)
-* **2022**: First Prize – The Chinese College Student Mathematical Modeling Competition (CUMCM)
+* **2022**: First Prize – The Chinese College Student Mathematical Modeling Competition (CUMCM) -->
 
-## 💡 Patents & Research
-* 一种基于时序感知的智慧家庭动态影响力最大化方法
+<!-- ## 💡 Patents & Research
+* 一种基于时序感知的智慧家庭动态影响力最大化方法 -->
 
-### Publications
+<!-- ### Publications
 <ul>{% for post in site.publications reversed %}
   {% include archive-single-cv.html %}
-{% endfor %}</ul>
+{% endfor %}</ul> -->
 
-<h2 align="left">🛠 Things I code with:</h2>
+<!-- <h2 align="left">🛠 Things I code with:</h2>
 
 **AI & Algorithms**: Reinforcement Learning (RL), Graph Neural Networks (GNN), Large Language Models (LLMs), AI Application Development.
 
@@ -81,4 +114,4 @@ Currently, I am working on **Dynamic Influence Maximization** and **Graph Neural
 
 ## 👨‍🏫 Others
 * **Teaching**: Mathematics Teacher at Xinyang Third Primary School (2024.04 – 2024.10).
-* **Service**: Active member of the Medical and AI research group at SDAI.
+* **Service**: Active member of the Medical and AI research group at SDAI. -->
