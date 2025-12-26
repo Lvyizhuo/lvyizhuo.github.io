@@ -1,6 +1,6 @@
 ---
 permalink: /
-# title: "Lvyizhuo's Home"
+# title: "About me"
 author_profile: true
 redirect_from: 
   - /about/
@@ -9,17 +9,18 @@ redirect_from:
 
 <h1><img src="https://emojis.slackmojis.com/emojis/images/1531849430/4246/blob-sunglasses.gif?1531849430" width="30"/> Hey! Nice to see you.</h1>
 
-<!-- <p align="left">
-  <img src="https://komarev.com/ghpvc/?username=Lvyizhuo-homepage&label=Page%20Views&color=0e75b6&style=flat-square" alt="Lvyizhuo's Page Views" />
-  <img src="https://img.shields.io/github/followers/Lvyizhuo?label=Followers&style=flat-square&color=blue" alt="followers" />
-  <img src="https://img.shields.io/github/stars/Lvyizhuo?label=Stars&style=flat-square&color=yellow" alt="stars" />
-</p> -->
-
 Welcome to my homepage! 
 
 I am a current Master's student studying at **[Qilu University of Technology (QLU)](https://www.qlu.edu.cn/)** and a Researcher/Intern at the **Medical and AI Team** in **[Shandong Artificial Intelligence Institute (SDAI)](http://.sdai.net/)** (2025–2027). 
 
 Currently, I am working on **Dynamic Influence Maximization** and **Graph Neural Networks**, while also exploring **Agents, RAG, and Large Language Models (LLMs)**. I am open to collaborations on AI Development, Java Backend Development, and Mini Program Development.
+
+## My research interests include:
+- Graph Neural Networks
+- Dynamic social network
+- Influence maximization
+- Spatiotemporal deep learning
+- Reinforcement learning
 
 ## 🎓 Education
 * **M.S. in Artificial Intelligence**, Qilu University of Technology, 2024 – Present
@@ -31,7 +32,7 @@ Currently, I am working on **Dynamic Influence Maximization** and **Graph Neural
 * **2022**: First Prize – The Chinese College Student Mathematical Modeling Competition (CUMCM)
 
 ## 💡 Patents & Research
-* **Invention Patent**: A Method for Dynamic Influence Maximization in Smart Homes Based on Temporal Awareness | [View Details](https://lvyizhuo.github.io/DocsWeb/)
+* 一种基于时序感知的智慧家庭动态影响力最大化方法
 
 ### Publications
 <ul>{% for post in site.publications reversed %}
@@ -70,30 +71,6 @@ Currently, I am working on **Dynamic Influence Maximization** and **Graph Neural
 ![VS Code](https://img.shields.io/badge/-VS%20Code-007ACC?style=flat-square&logo=visual-studio-code&logoColor=white)
 ![PyCharm](https://img.shields.io/badge/-PyCharm-000000?style=flat-square&logo=pycharm&logoColor=white)
 ![IntelliJ IDEA](https://img.shields.io/badge/-IntelliJ%20IDEA-000000?style=flat-square&logo=intellij-idea&logoColor=white)
-
-## 🎁 Open Source Projects
-
-<table>
-  <thead align="center">
-    <tr>
-      <th>Project</th>
-      <th>Stars</th>
-      <th>Forks</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><a href="https://github.com/Lvyizhuo/2048_MiniProgram"><b>2048 MiniProgram</b></a></td>
-      <td><img alt="Stars" src="https://img.shields.io/github/stars/Lvyizhuo/2048_MiniProgram?style=flat-square&labelColor=343b41"/></td>
-      <td><img alt="Forks" src="https://img.shields.io/github/forks/Lvyizhuo/2048_MiniProgram?style=flat-square&labelColor=343b41"/></td>
-    </tr>
-    <tr>
-      <td><a href="https://github.com/Lvyizhuo/DynamicGraphInfluenceMaximization"><b>Dynamic Graph Influence Maximization</b></a></td>
-      <td><img alt="Stars" src="https://img.shields.io/github/stars/Lvyizhuo/DynamicGraphInfluenceMaximization?style=flat-square&labelColor=343b41"/></td>
-      <td><img alt="Forks" src="https://img.shields.io/github/forks/Lvyizhuo/DynamicGraphInfluenceMaximization?style=flat-square&labelColor=343b41"/></td>
-    </tr>
-  </tbody>
-</table>
 
 ## 📝 Latest Posts
 - [【Linux服务器】——模型训练技巧](https://blog.csdn.net/Lvyizhuo/article/details/150344137)
