@@ -19,17 +19,19 @@ on:
 jobs:
   sync-blog:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
     
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: '3.11'
     
     - name: Install dependencies
       run: |
@@ -39,11 +41,16 @@ jobs:
     - name: Fetch CSDN articles
       run: |
         python scripts/fetch_csdn_articles.py
+      continue-on-error: false
     
     - name: Check for changes
       id: check_changes
       run: |
-        git diff --exit-code _data/csdn_posts.yml || echo "changed=true" >> $GITHUB_OUTPUT
+        if git diff --quiet _data/csdn_posts.yml; then
+          echo "changed=false" >> $GITHUB_OUTPUT
+        else
+          echo "changed=true" >> $GITHUB_OUTPUT
+        fi
     
     - name: Commit and push if changed
       if: steps.check_changes.outputs.changed == 'true'
