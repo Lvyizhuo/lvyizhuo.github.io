@@ -19,12 +19,23 @@ CSDN_USERNAME = "Lvyizhuo"
 CSDN_BLOG_URL = f"https://blog.csdn.net/{CSDN_USERNAME}"
 OUTPUT_FILE = "_data/csdn_posts.yml"
 
-# 请求头，模拟浏览器访问
+# 请求头，模拟真实浏览器访问
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
     'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+    'Accept-Encoding': 'gzip, deflate, br',
     'Connection': 'keep-alive',
+    'Cache-Control': 'max-age=0',
+    'Sec-Ch-Ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+    'Sec-Ch-Ua-Mobile': '?0',
+    'Sec-Ch-Ua-Platform': '"Linux"',
+    'Sec-Fetch-Dest': 'document',
+    'Sec-Fetch-Mode': 'navigate',
+    'Sec-Fetch-Site': 'none',
+    'Sec-Fetch-User': '?1',
+    'Upgrade-Insecure-Requests': '1',
+    'Referer': 'https://www.csdn.net/',
 }
 
 
@@ -42,111 +53,156 @@ def fetch_article_list(max_pages=5):
     
     print(f"🔍 开始抓取CSDN博客: {CSDN_BLOG_URL}")
     
+    # 创建 session 保持 cookies
+    session = requests.Session()
+    session.headers.update(HEADERS)
+    
+    # 先访问主页获取 cookies
+    try:
+        print(f"📋 预访问主页获取 cookies...")
+        session.get("https://www.csdn.net/", timeout=10)
+        time.sleep(2)  # 等待2秒
+    except Exception as e:
+        print(f"⚠️  预访问失败: {str(e)}")
+    
     # 只抓取第一页（通常已包含所有近期文章）
     page = 1
-    try:
-        url = f"{CSDN_BLOG_URL}?type=blog"
-        
-        print(f"📄 正在抓取博客文章列表: {url}")
-        
-        # 发送请求
-        response = requests.get(url, headers=HEADERS, timeout=10)
-        response.raise_for_status()
-        response.encoding = 'utf-8'
-        
-        # 解析HTML
-        soup = BeautifulSoup(response.text, 'lxml')
-        
-        # 查找文章列表（CSDN可能有多种布局）
-        article_items = soup.find_all('div', class_='article-item-box')
-        
-        # 尝试其他可能的选择器
-        if not article_items:
-            article_items = soup.find_all('article', class_='blog-list-box')
-        if not article_items:
-            article_items = soup.find_all('div', class_='blog-list-box')
-        
-        if not article_items:
-            print(f"⚠️  未找到文章，尝试备用方法...")
-            # 备用：直接查找所有文章链接
-            return []
-        
-        print(f"✅ 找到 {len(article_items)} 篇文章")
-        
-        for item in article_items:
-            try:
-                # 提取文章标题和链接 - 使用更通用的选择器
-                title_elem = item.find('a', href=lambda x: x and '/article/details/' in x)
-                if not title_elem:
-                    title_elem = item.find('a', class_='blog-title-box')
-                if not title_elem:
-                    # 查找h4标签内的链接
-                    h4 = item.find('h4')
-                    if h4:
-                        title_elem = h4.find('a')
+    max_retries = 3
+    
+    for retry in range(max_retries):
+        try:
+            url = f"{CSDN_BLOG_URL}/article/list/1"  # 使用新的 URL 格式
+            
+            print(f"📄 正在抓取博客文章列表 (尝试 {retry + 1}/{max_retries}): {url}")
+            
+            # 发送请求
+            response = session.get(url, timeout=15)
+            response.raise_for_status()
+            response.encoding = 'utf-8'
+            
+            # 解析HTML
+            soup = BeautifulSoup(response.text, 'lxml')
+            
+            # 查找文章列表（CSDN可能有多种布局）
+            article_items = soup.find_all('div', class_='article-item-box')
+            
+            # 尝试其他可能的选择器
+            if not article_items:
+                article_items = soup.find_all('article', class_='blog-list-box')
+            if not article_items:
+                article_items = soup.find_all('div', class_='blog-list-box')
+            if not article_items:
+                # 尝试另一种常见布局
+                article_items = soup.find_all('div', {'class': re.compile(r'article.*item')})
+            
+            if not article_items:
+                print(f"⚠️  未找到文章，页面内容可能已变化...")
+                # 保存 HTML 用于调试
+                debug_file = "_data/debug_csdn.html"
+                os.makedirs(os.path.dirname(debug_file), exist_ok=True)
+                with open(debug_file, 'w', encoding='utf-8') as f:
+                    f.write(response.text)
+                print(f"📝 已保存页面内容到 {debug_file} 供调试")
                 
-                if not title_elem:
+                if retry < max_retries - 1:
+                    wait_time = (retry + 1) * 3
+                    print(f"⏳ 等待 {wait_time} 秒后重试...")
+                    time.sleep(wait_time)
                     continue
-                
-                title = title_elem.get_text().strip()
-                # 清理标题中的多余空白和换行
-                title = ' '.join(title.split())
-                # 移除"原创"标签  
-                title = title.replace('原创', '').strip()
-                # 如果标题过长，截取第一句话作为标题（通常标题和摘要在一起）
-                if len(title) > 80:
-                    # 尝试在第一个句号、问号、感叹号处截断
-                    for sep in ['。', '！', '？', ' 本文', ' 这是']:
-                        if sep in title:
-                            title = title.split(sep)[0] + ('。' if sep in ['。', '！', '？'] else '')
-                            break
-                    # 如果还是太长，直接截断
-                    if len(title) > 80:
-                        title = title[:77] + '...'
-                
-                link = title_elem.get('href', '')
-                
-                # 确保链接是完整的URL
-                if link and not link.startswith('http'):
-                    link = 'https://blog.csdn.net' + link
-                
-                # 提取发布日期
-                date_elem = item.find('span', class_='date')
-                date_str = date_elem.get_text().strip() if date_elem else ''
-                
-                # 提取摘要
-                excerpt_elem = item.find('p', class_='content')
-                if not excerpt_elem:
-                    excerpt_elem = item.find('div', class_='content')
-                excerpt = excerpt_elem.get_text().strip() if excerpt_elem else ''
-                
-                # 提取阅读量、点赞等信息
-                info_box = item.find('div', class_='info-box')
-                views = ''
-                if info_box:
-                    view_elem = info_box.find('span', class_='read-num')
-                    if view_elem:
-                        views = view_elem.get_text().strip()
-                
-                # 构建文章数据
-                article = {
-                    'title': title,
-                    'link': link,
-                    'date': date_str,
-                    'excerpt': excerpt[:150] + '...' if len(excerpt) > 150 else excerpt,
-                    'views': views
-                }
-                
-                articles.append(article)
-                
-            except Exception as e:
-                print(f"⚠️  解析文章时出错: {str(e)}")
+                else:
+                    return []
+            
+            print(f"✅ 找到 {len(article_items)} 篇文章")
+            break  # 成功获取，退出重试循环
+            
+        except requests.RequestException as e:
+            print(f"❌ 请求失败 (尝试 {retry + 1}/{max_retries}): {str(e)}")
+            if retry < max_retries - 1:
+                wait_time = (retry + 1) * 5
+                print(f"⏳ 等待 {wait_time} 秒后重试...")
+                time.sleep(wait_time)
+            else:
+                return []
+        except Exception as e:
+            print(f"❌ 处理时出错 (尝试 {retry + 1}/{max_retries}): {str(e)}")
+            if retry < max_retries - 1:
+                wait_time = (retry + 1) * 3
+                print(f"⏳ 等待 {wait_time} 秒后重试...")
+                time.sleep(wait_time)
+            else:
+                return []
+    
+    # 解析文章
+    # 解析文章
+    for item in article_items:
+        try:
+            # 提取文章标题和链接 - 使用更通用的选择器
+            title_elem = item.find('a', href=lambda x: x and '/article/details/' in x)
+            if not title_elem:
+                title_elem = item.find('a', class_='blog-title-box')
+            if not title_elem:
+                # 查找h4标签内的链接
+                h4 = item.find('h4')
+                if h4:
+                    title_elem = h4.find('a')
+            
+            if not title_elem:
                 continue
-        
-    except requests.RequestException as e:
-        print(f"❌ 请求失败: {str(e)}")
-    except Exception as e:
-        print(f"❌ 处理时出错: {str(e)}")
+            
+            title = title_elem.get_text().strip()
+            # 清理标题中的多余空白和换行
+            title = ' '.join(title.split())
+            # 移除"原创"标签  
+            title = title.replace('原创', '').strip()
+            # 如果标题过长，截取第一句话作为标题（通常标题和摘要在一起）
+            if len(title) > 80:
+                # 尝试在第一个句号、问号、感叹号处截断
+                for sep in ['。', '！', '？', ' 本文', ' 这是']:
+                    if sep in title:
+                        title = title.split(sep)[0] + ('。' if sep in ['。', '！', '？'] else '')
+                        break
+                # 如果还是太长，直接截断
+                if len(title) > 80:
+                    title = title[:77] + '...'
+            
+            link = title_elem.get('href', '')
+            
+            # 确保链接是完整的URL
+            if link and not link.startswith('http'):
+                link = 'https://blog.csdn.net' + link
+            
+            # 提取发布日期
+            date_elem = item.find('span', class_='date')
+            date_str = date_elem.get_text().strip() if date_elem else ''
+            
+            # 提取摘要
+            excerpt_elem = item.find('p', class_='content')
+            if not excerpt_elem:
+                excerpt_elem = item.find('div', class_='content')
+            excerpt = excerpt_elem.get_text().strip() if excerpt_elem else ''
+            
+            # 提取阅读量、点赞等信息
+            info_box = item.find('div', class_='info-box')
+            views = ''
+            if info_box:
+                view_elem = info_box.find('span', class_='read-num')
+                if view_elem:
+                    views = view_elem.get_text().strip()
+            
+            # 构建文章数据
+            article = {
+                'title': title,
+                'link': link,
+                'date': date_str,
+                'excerpt': excerpt[:150] + '...' if len(excerpt) > 150 else excerpt,
+                'views': views
+            }
+            
+            articles.append(article)
+            
+        except Exception as e:
+            print(f"⚠️  解析文章时出错: {str(e)}")
+            continue
     
     print(f"\n✨ 总共抓取到 {len(articles)} 篇文章")
     return articles
