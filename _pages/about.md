@@ -24,8 +24,8 @@ Welcome to my homepage! I am a passionate researcher and developer.
 
 Currently, my work bridge the gap between theory and application. I am focusing on **Dynamic Influence Maximization** and **Graph Neural Networks**, while actively exploring the frontiers of **Agents, RAG, and Large Language Models (LLMs)**. 
 
-<i class="fa fa-handshake-o"></i> I am always open to collaborations on:
-`AI Development` • `Java Backend` • `Mini Program Development`
+<!-- <i class="fa fa-handshake-o"></i> I am always open to collaborations on:
+`AI Development` • `Java Backend` • `Mini Program Development` -->
 
 ---
 
