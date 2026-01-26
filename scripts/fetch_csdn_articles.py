@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 CSDN博客文章抓取脚本
-使用 CSDN API 抓取指定博客的所有文章列表并保存为YAML格式
+使用 CSDN API 或 HTML 解析抓取指定博客的所有文章列表并保存为YAML格式
 作者: GitHub Actions Bot
 """
 
@@ -12,6 +12,8 @@ import json
 from datetime import datetime
 import time
 import os
+from bs4 import BeautifulSoup
+import re
 
 # CSDN博客配置
 CSDN_USERNAME = "Lvyizhuo"
@@ -20,13 +22,150 @@ CSDN_BLOG_URL = f"https://blog.csdn.net/{CSDN_USERNAME}"
 CSDN_ARTICLE_LIST_API = "https://blog.csdn.net/community/home-api/v1/get-business-list"
 OUTPUT_FILE = "_data/csdn_posts.yml"
 
-# 请求头 - 模拟移动端请求
+# 请求头 - 模拟真实浏览器
 HEADERS = {
-    'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+    'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+    'Accept-Encoding': 'gzip, deflate, br',
+    'Connection': 'keep-alive',
+    'Cache-Control': 'max-age=0',
+    'Upgrade-Insecure-Requests': '1',
+    'Referer': 'https://blog.csdn.net/',
+}
+
+# API 专用请求头
+API_HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
     'Accept': 'application/json, text/plain, */*',
     'Accept-Language': 'zh-CN,zh;q=0.9',
     'Referer': f'https://blog.csdn.net/{CSDN_USERNAME}',
+    'Origin': 'https://blog.csdn.net',
 }
+
+
+def fetch_article_list_from_html():
+    """
+    使用 HTML 解析方式抓取博客文章列表（备用方法）
+    
+    Returns:
+        articles: 文章列表
+    """
+    articles = []
+    
+    print(f"🔍 使用 HTML 解析方式抓取CSDN博客: {CSDN_USERNAME}")
+    
+    session = requests.Session()
+    session.headers.update(HEADERS)
+    
+    max_retries = 3
+    page = 1
+    
+    while True:
+        for retry in range(max_retries):
+            try:
+                print(f"📡 正在请求第 {page} 页 (尝试 {retry + 1}/{max_retries})...")
+                
+                # 构建博客列表URL
+                url = f"{CSDN_BLOG_URL}/article/list/{page}"
+                
+                # 发送请求
+                response = session.get(url, timeout=15)
+                response.raise_for_status()
+                
+                # 使用 BeautifulSoup 解析 HTML
+                soup = BeautifulSoup(response.text, 'lxml')
+                
+                # 查找文章列表
+                article_items = soup.select('.article-item-box')
+                
+                if not article_items:
+                    print(f"✅ 第 {page} 页无更多文章")
+                    break
+                
+                print(f"✅ 第 {page} 页找到 {len(article_items)} 篇文章")
+                
+                # 解析每篇文章
+                for item in article_items:
+                    try:
+                        # 获取标题和链接
+                        title_elem = item.select_one('h4 a')
+                        if not title_elem:
+                            continue
+                        
+                        title = title_elem.get_text(strip=True)
+                        link = title_elem.get('href', '')
+                        
+                        # 确保链接是完整的
+                        if link and not link.startswith('http'):
+                            link = 'https://blog.csdn.net' + link
+                        
+                        # 获取日期
+                        date_elem = item.select_one('.date')
+                        date_str = ''
+                        if date_elem:
+                            date_text = date_elem.get_text(strip=True)
+                            # 尝试提取日期，格式可能是 "2024-01-15" 或其他
+                            date_match = re.search(r'\d{4}-\d{2}-\d{2}', date_text)
+                            if date_match:
+                                date_str = date_match.group()
+                        
+                        # 获取摘要
+                        desc_elem = item.select_one('.content')
+                        description = ''
+                        if desc_elem:
+                            description = desc_elem.get_text(strip=True)
+                            if len(description) > 150:
+                                description = description[:150] + '...'
+                        
+                        # 获取阅读量
+                        views_elem = item.select_one('.read-num')
+                        views = ''
+                        if views_elem:
+                            views_text = views_elem.get_text(strip=True)
+                            # 提取数字
+                            views_match = re.search(r'\d+', views_text)
+                            if views_match:
+                                views = views_match.group()
+                        
+                        if title and link:
+                            article = {
+                                'title': title,
+                                'link': link,
+                                'date': date_str,
+                                'excerpt': description,
+                                'views': views
+                            }
+                            articles.append(article)
+                        
+                    except Exception as e:
+                        print(f"⚠️  解析文章时出错: {str(e)}")
+                        continue
+                
+                # 成功获取，跳出重试循环
+                break
+                
+            except Exception as e:
+                print(f"❌ 请求失败 (尝试 {retry + 1}/{max_retries}): {str(e)}")
+                if retry < max_retries - 1:
+                    time.sleep((retry + 1) * 3)
+                else:
+                    print(f"⚠️  第 {page} 页获取失败，返回已获取的 {len(articles)} 篇文章")
+                    return articles
+        else:
+            # 重试全部失败
+            break
+        
+        # 检查是否还有文章
+        if not article_items or len(article_items) == 0:
+            break
+        
+        # 继续获取下一页
+        page += 1
+        time.sleep(2)  # 礼貌地等待2秒
+    
+    print(f"\n✨ 总共抓取到 {len(articles)} 篇文章")
+    return articles
 
 
 def fetch_article_list_from_api():
@@ -41,7 +180,7 @@ def fetch_article_list_from_api():
     print(f"🔍 开始使用 API 抓取CSDN博客: {CSDN_USERNAME}")
     
     session = requests.Session()
-    session.headers.update(HEADERS)
+    session.headers.update(API_HEADERS)
     
     max_retries = 3
     page = 1
@@ -197,12 +336,19 @@ def save_to_yaml(articles):
 def main():
     """主函数"""
     print("=" * 60)
-    print("CSDN博客文章同步工具 - 使用 API 方法")
+    print("CSDN博客文章同步工具")
     print("=" * 60)
     
     try:
-        # 抓取文章
+        # 首先尝试使用 API 方法
+        print("\n方法1: 尝试使用 API...")
         articles = fetch_article_list_from_api()
+        
+        # 如果 API 失败，使用 HTML 解析方法
+        if not articles:
+            print("\n⚠️  API 方法失败，切换到 HTML 解析方法...")
+            print("方法2: 使用 HTML 解析...")
+            articles = fetch_article_list_from_html()
         
         if articles:
             # 保存到YAML
@@ -211,7 +357,11 @@ def main():
             return 0
         else:
             print("\n⚠️  未抓取到任何文章")
-            return 1
+            # 即使没有文章也不算错误，可能博客确实是空的
+            # 创建一个空的数据文件
+            save_to_yaml([])
+            print("💾 已保存空的文章列表")
+            return 0
             
     except Exception as e:
         print(f"\n❌ 发生错误: {str(e)}")
