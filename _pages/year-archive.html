@@ -10,181 +10,444 @@ redirect_from:
 {% include base_path %}
 
 <style>
-  .csdn-article-card {
-    margin-bottom: 1.2em;
-    padding: 1.2em;
-    background: #ffffff;
-    border: 1px solid #e1e4e8;
-    border-radius: 6px;
-    transition: all 0.3s ease;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  /* ===== CSS 变量 - 支持明暗主题 ===== */
+  :root {
+    --blog-bg-primary: #ffffff;
+    --blog-bg-secondary: #f8fafc;
+    --blog-bg-card: #ffffff;
+    --blog-text-primary: #1e293b;
+    --blog-text-secondary: #64748b;
+    --blog-text-muted: #94a3b8;
+    --blog-border-color: #e2e8f0;
+    --blog-accent-color: #6366f1;
+    --blog-accent-light: #818cf8;
+    --blog-accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+    --blog-shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --blog-shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+    --blog-shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+    --blog-card-hover-transform: translateY(-3px);
   }
-  
-  .csdn-article-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    border-color: #0056b3;
+
+  /* Dark 主题 */
+  [data-theme="dark"],
+  .dark-theme,
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --blog-bg-primary: #0f172a;
+      --blog-bg-secondary: #1e293b;
+      --blog-bg-card: #1e293b;
+      --blog-text-primary: #f1f5f9;
+      --blog-text-secondary: #cbd5e1;
+      --blog-text-muted: #94a3b8;
+      --blog-border-color: #334155;
+      --blog-accent-color: #818cf8;
+      --blog-accent-light: #a5b4fc;
+      --blog-shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+      --blog-shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+      --blog-shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+    }
   }
-  
-  .csdn-article-title {
-    font-size: 1.25em;
-    font-weight: 600;
-    margin: 0 0 0.5em 0;
-    line-height: 1.4;
+
+  /* 强制 dark 类支持 */
+  .dark [data-theme="dark"],
+  html.dark-mode {
+    --blog-bg-primary: #0f172a;
+    --blog-bg-secondary: #1e293b;
+    --blog-bg-card: #1e293b;
+    --blog-text-primary: #f1f5f9;
+    --blog-text-secondary: #cbd5e1;
+    --blog-text-muted: #94a3b8;
+    --blog-border-color: #334155;
+    --blog-accent-color: #818cf8;
+    --blog-accent-light: #a5b4fc;
   }
-  
-  .csdn-article-title a {
-    color: #24292e;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
+
+  /* ===== 页面容器 ===== */
+  .blog-container {
+    max-width: 100%;
+    margin: 0 auto;
   }
-  
-  .csdn-article-title a:hover {
-    color: #0056b3;
-  }
-  
-  .csdn-external-icon {
-    margin-left: 0.3em;
-    font-size: 0.8em;
-    opacity: 0.6;
-  }
-  
-  .csdn-article-meta {
-    display: flex;
-    align-items: center;
-    gap: 1em;
-    font-size: 0.9em;
-    color: #586069;
-    margin-bottom: 0.8em;
-  }
-  
-  .csdn-article-meta i {
-    margin-right: 0.3em;
-  }
-  
-  .csdn-article-excerpt {
-    color: #586069;
-    line-height: 1.6;
-    margin: 0;
-  }
-  
-  .csdn-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  /* ===== 头部横幅 ===== */
+  .blog-hero {
+    background: var(--blog-accent-gradient);
     color: white;
-    padding: 1.5em;
-    border-radius: 8px;
+    padding: 2.5em 2em;
+    border-radius: 16px;
     margin-bottom: 2em;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    box-shadow: var(--blog-shadow-lg);
+    position: relative;
+    overflow: hidden;
   }
-  
-  .csdn-header h2 {
+
+  .blog-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .blog-hero-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .blog-hero h2 {
     margin: 0 0 0.5em 0;
-    font-size: 1.5em;
+    font-size: 1.8em;
+    font-weight: 700;
     border-bottom: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
   }
-  
-  .csdn-header p {
+
+  .blog-hero h2 i {
+    font-size: 0.9em;
+  }
+
+  .blog-hero-desc {
     margin: 0;
     opacity: 0.95;
+    font-size: 1.05em;
   }
-  
-  .csdn-stats {
-    background: #f6f8fa;
-    padding: 0.8em 1em;
-    border-radius: 6px;
+
+  .blog-hero-desc a {
+    color: white;
+    text-decoration: none;
+    border-bottom: 2px solid rgba(255,255,255,0.5);
+    transition: border-color 0.3s ease;
+  }
+
+  .blog-hero-desc a:hover {
+    border-bottom-color: white;
+  }
+
+  /* ===== 统计信息栏 ===== */
+  .blog-stats {
+    background: var(--blog-bg-card);
+    border: 1px solid var(--blog-border-color);
+    padding: 1em 1.5em;
+    border-radius: 12px;
     margin-bottom: 2em;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 1em;
+    box-shadow: var(--blog-shadow-sm);
   }
-  
+
+  .blog-stats-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    color: var(--blog-text-secondary);
+    font-size: 0.95em;
+  }
+
+  .blog-stats-item i {
+    color: var(--blog-accent-color);
+  }
+
+  .blog-stats-item strong {
+    color: var(--blog-text-primary);
+    font-weight: 600;
+  }
+
+  /* ===== 文章网格 ===== */
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5em;
+    margin-bottom: 2em;
+  }
+
+  @media (max-width: 768px) {
+    .blog-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ===== 文章卡片 ===== */
+  .blog-card {
+    background: var(--blog-bg-card);
+    border: 1px solid var(--blog-border-color);
+    border-radius: 12px;
+    padding: 1.5em;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--blog-shadow-sm);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .blog-card:hover {
+    transform: var(--blog-card-hover-transform);
+    box-shadow: var(--blog-shadow-lg);
+    border-color: var(--blog-accent-color);
+  }
+
+  .blog-card-header {
+    margin-bottom: 1em;
+  }
+
+  .blog-card-title {
+    font-size: 1.15em;
+    font-weight: 600;
+    margin: 0 0 0.6em 0;
+    line-height: 1.5;
+  }
+
+  .blog-card-title a {
+    color: var(--blog-text-primary);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.4em;
+    transition: color 0.2s ease;
+  }
+
+  .blog-card-title a:hover {
+    color: var(--blog-accent-color);
+  }
+
+  .blog-card-title .external-icon {
+    font-size: 0.7em;
+    opacity: 0.5;
+    flex-shrink: 0;
+    margin-top: 0.4em;
+  }
+
+  .blog-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 1.2em;
+    flex-wrap: wrap;
+  }
+
+  .blog-card-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-size: 0.85em;
+    color: var(--blog-text-muted);
+  }
+
+  .blog-card-meta-item i {
+    font-size: 0.9em;
+  }
+
+  .blog-card-excerpt {
+    color: var(--blog-text-secondary);
+    line-height: 1.7;
+    margin: 0;
+    font-size: 0.92em;
+    flex-grow: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* ===== 空状态 ===== */
+  .blog-empty {
+    text-align: center;
+    padding: 4em 2em;
+    background: var(--blog-bg-card);
+    border: 1px solid var(--blog-border-color);
+    border-radius: 12px;
+    box-shadow: var(--blog-shadow-sm);
+  }
+
+  .blog-empty-icon {
+    font-size: 3em;
+    color: var(--blog-accent-color);
+    margin-bottom: 0.5em;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .blog-empty-text {
+    color: var(--blog-text-secondary);
+    margin: 0;
+    line-height: 1.8;
+  }
+
+  .blog-empty-text a {
+    color: var(--blog-accent-color);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .blog-empty-text a:hover {
+    text-decoration: underline;
+  }
+
+  /* ===== 本地文章分区 ===== */
   .local-posts-section {
     margin-top: 3em;
-    padding-top: 2em;
-    border-top: 2px solid #e1e4e8;
+    padding-top: 2.5em;
+    border-top: 2px solid var(--blog-border-color);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6em;
+    margin-bottom: 0.5em;
+    color: var(--blog-text-primary);
+  }
+
+  .section-header i {
+    color: var(--blog-accent-color);
+  }
+
+  .section-desc {
+    color: var(--blog-text-secondary);
+    margin-bottom: 1.5em;
+    font-size: 0.95em;
+  }
+
+  .archive__subtitle {
+    color: var(--blog-text-primary);
+    border-bottom: 2px solid var(--blog-accent-color);
+    padding-bottom: 0.3em;
+    margin-top: 2em;
+  }
+
+  /* ===== 响应式调整 ===== */
+  @media (max-width: 600px) {
+    .blog-hero {
+      padding: 1.8em 1.2em;
+      border-radius: 12px;
+    }
+
+    .blog-hero h2 {
+      font-size: 1.4em;
+    }
+
+    .blog-stats {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .blog-card {
+      padding: 1.2em;
+    }
   }
 </style>
 
-<!-- CSDN博客文章区域 -->
-<div class="csdn-header">
-  <h2>
-    <i class="fa fa-rss"></i> My Blog
-  </h2>
-  <p>
-    Automatically synced from 
-    <a href="https://blog.csdn.net/Lvyizhuo?type=blog" target="_blank" rel="noopener noreferrer" style="color: white; text-decoration: underline;">
-      CSDN-花间相见 <i class="fa fa-external-link" style="font-size: 0.8em;"></i>
-    </a>
-  </p>
-</div>
+<div class="blog-container">
 
-{% if site.data.csdn_posts.articles.size > 0 %}
-  <div class="csdn-stats">
-    <span>
-      <i class="fa fa-book"></i> 
-      Latest <strong>{{ site.data.csdn_posts.total_count }}</strong> articles
-    </span>
-    <span style="font-size: 0.9em; color: #586069;">
-      <i class="fa fa-clock-o"></i> 
-      Last updated: {{ site.data.csdn_posts.last_updated }}
-    </span>
-  </div>
-
-  {% for article in site.data.csdn_posts.articles %}
-    <article class="csdn-article-card">
-      <h3 class="csdn-article-title">
-        <a href="{{ article.link }}" target="_blank" rel="noopener noreferrer">
-          {{ article.title }}
-          <i class="fa fa-external-link csdn-external-icon"></i>
+  <!-- 头部横幅 -->
+  <div class="blog-hero">
+    <div class="blog-hero-content">
+      <h2>
+        <i class="fa fa-rss"></i> My Blog
+      </h2>
+      <p class="blog-hero-desc">
+        Automatically synced from 
+        <a href="https://blog.csdn.net/Lvyizhuo?type=blog" target="_blank" rel="noopener noreferrer">
+          CSDN-花间相见 <i class="fa fa-external-link" style="font-size: 0.8em;"></i>
         </a>
-      </h3>
-      
-      <div class="csdn-article-meta">
-        {% if article.date %}
-          <span><i class="fa fa-calendar"></i>{{ article.date }}</span>
-        {% endif %}
-        {% if article.views %}
-          <span><i class="fa fa-eye"></i>{{ article.views }}</span>
-        {% endif %}
-      </div>
-      
-      {% if article.excerpt %}
-        <p class="csdn-article-excerpt">{{ article.excerpt }}</p>
-      {% endif %}
-    </article>
-  {% endfor %}
-
-{% else %}
-  <div style="text-align: center; padding: 3em 1em; background: #f6f8fa; border-radius: 8px;">
-    <i class="fa fa-spinner fa-spin" style="font-size: 2em; color: #0056b3; margin-bottom: 1em;"></i>
-    <p style="color: #586069; margin: 0;">
-      正在同步CSDN博客文章，请稍候...<br>
-      <small>您也可以直接访问 
-        <a href="https://blog.csdn.net/Lvyizhuo?type=blog" target="_blank">我的CSDN博客</a>
-      </small>
-    </p>
+      </p>
+    </div>
   </div>
-{% endif %}
 
-<!-- 本地精选文章（如果有） -->
-{% if site.posts.size > 0 %}
-  <div class="local-posts-section">
-    <h2 style="margin-bottom: 1em;">
-      <i class="fa fa-star"></i> 精选文章
-    </h2>
-    <p style="color: #586069; margin-bottom: 1.5em;">
-      以下是站内托管的精选博客文章
-    </p>
+  {% if site.data.csdn_posts.articles.size > 0 %}
     
-    {% capture written_year %}'None'{% endcapture %}
-    {% for post in site.posts %}
-      {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
-      {% if year != written_year %}
-        <h3 id="{{ year | slugify }}" class="archive__subtitle" style="margin-top: 1.5em;">{{ year }}</h3>
-        {% capture written_year %}{{ year }}{% endcapture %}
-      {% endif %}
-      {% include archive-single.html %}
-    {% endfor %}
-  </div>
-{% endif %}
+    <!-- 统计信息 -->
+    <div class="blog-stats">
+      <div class="blog-stats-item">
+        <i class="fa fa-newspaper-o"></i>
+        <span>Latest <strong>{{ site.data.csdn_posts.total_count }}</strong> articles</span>
+      </div>
+      <div class="blog-stats-item">
+        <i class="fa fa-refresh"></i>
+        <span>Updated: <strong>{{ site.data.csdn_posts.last_updated }}</strong></span>
+      </div>
+    </div>
+
+    <!-- 文章网格 -->
+    <div class="blog-grid">
+      {% for article in site.data.csdn_posts.articles %}
+        <article class="blog-card">
+          <div class="blog-card-header">
+            <h3 class="blog-card-title">
+              <a href="{{ article.link }}" target="_blank" rel="noopener noreferrer">
+                <span>{{ article.title }}</span>
+                <i class="fa fa-external-link external-icon"></i>
+              </a>
+            </h3>
+            <div class="blog-card-meta">
+              {% if article.date %}
+                <span class="blog-card-meta-item">
+                  <i class="fa fa-calendar-o"></i>
+                  {{ article.date }}
+                </span>
+              {% endif %}
+              {% if article.views and article.views != '' %}
+                <span class="blog-card-meta-item">
+                  <i class="fa fa-eye"></i>
+                  {{ article.views }} views
+                </span>
+              {% endif %}
+            </div>
+          </div>
+          
+          {% if article.excerpt %}
+            <p class="blog-card-excerpt">{{ article.excerpt }}</p>
+          {% endif %}
+        </article>
+      {% endfor %}
+    </div>
+
+  {% else %}
+    
+    <!-- 空状态 -->
+    <div class="blog-empty">
+      <div class="blog-empty-icon">
+        <i class="fa fa-spinner fa-spin"></i>
+      </div>
+      <p class="blog-empty-text">
+        正在同步 CSDN 博客文章，请稍候...<br>
+        <small>您也可以直接访问 
+          <a href="https://blog.csdn.net/Lvyizhuo?type=blog" target="_blank">我的 CSDN 博客</a>
+        </small>
+      </p>
+    </div>
+
+  {% endif %}
+
+  <!-- 本地精选文章 -->
+  {% if site.posts.size > 0 %}
+    <div class="local-posts-section">
+      <h2 class="section-header">
+        <i class="fa fa-star"></i> 精选文章
+      </h2>
+      <p class="section-desc">
+        以下是站内托管的精选博客文章
+      </p>
+      
+      {% capture written_year %}'None'{% endcapture %}
+      {% for post in site.posts %}
+        {% capture year %}{{ post.date | date: '%Y' }}{% endcapture %}
+        {% if year != written_year %}
+          <h3 id="{{ year | slugify }}" class="archive__subtitle">{{ year }}</h3>
+          {% capture written_year %}{{ year }}{% endcapture %}
+        {% endif %}
+        {% include archive-single.html %}
+      {% endfor %}
+    </div>
+  {% endif %}
+
+</div>
