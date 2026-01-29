@@ -58,5 +58,5 @@ jobs:
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git add _data/csdn_posts.yml
-        git commit -m "🤖 Auto-sync CSDN blog articles [$(date +'%Y-%m-%d %H:%M:%S')]"
+        git commit -m "🤖 Auto-sync CSDN blog (最近20篇文章) [$(date +'%Y-%m-%d %H:%M:%S')]"
         git push
